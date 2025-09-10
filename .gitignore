@@ -90,3 +90,4 @@ artifacts/
 *.yml
 config.json
 secrets.json
+temp_input.txt
