@@ -13,24 +13,16 @@
     --success-color: #10b981;
     --warning-color: #f59e0b;
     --error-color: #ef4444;
-    --user-msg-bg: #2563eb;
+    --user-msg-bg: #45b17f;
     --bot-msg-bg: #e5e7eb;
     --user-msg-text: white;
     --bot-msg-text: #1f2937;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
 body {
-    background-color: #f9fafb;
-    height: 100vh;
+    background: linear-gradient(135deg, #e0e7ff 0%, #f9fafb 100%);
+    min-height: 100vh;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
@@ -42,62 +34,75 @@ body {
     flex-direction: column;
     height: 95vh;
     background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 18px;
+    box-shadow: 0 10px 32px rgba(37, 99, 235, 0.08), 0 2px 8px rgba(0,0,0,0.04);
     overflow: hidden;
+    border: 1px solid #e0e7ff;
 }
 
 .header {
-    background-color: var(--primary-color);
+    background: linear-gradient(90deg, var(--primary-color) 70%, var(--secondary-color) 100%);
     color: white;
-    padding: 16px 20px;
+    padding: 18px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.08);
 }
 
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .logo-icon {
-    font-size: 24px;
+    font-size: 28px;
+    color: #fff;
 }
 
 .status {
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-size: 14px;
+    gap: 7px;
+    font-size: 15px;
 }
 
 .status-dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     background-color: var(--success-color);
     border-radius: 50%;
     transition: background-color 0.3s;
+    box-shadow: 0 0 4px #10b98180;
 }
 
 .chat-container {
     flex: 1;
     overflow-y: auto;
-    padding: 20px;
-    background-color: #f9fafb;
+    padding: 28px 24px 18px 24px;
+    background-color: #f6f8fa;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 18px;
+    border-bottom: 1px solid #e0e7ff;
+    position: relative;
 }
 
 .message {
     max-width: 75%;
-    padding: 12px 16px;
-    border-radius: 18px;
-    line-height: 1.5;
+    padding: 14px 18px;
+    border-radius: 20px;
+    line-height: 1.6;
     position: relative;
     animation: fadeIn 0.3s ease;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.message:hover {
+    box-shadow: 0 4px 16px rgba(37,99,235,0.08);
+    transform: translateY(-2px) scale(1.01);
 }
 
 @keyframes fadeIn {
@@ -109,19 +114,21 @@ body {
     align-self: flex-start;
     background-color: var(--bot-msg-bg);
     color: var(--bot-msg-text);
-    border-bottom-left-radius: 4px;
+    border-bottom-left-radius: 6px;
+    border-top-left-radius: 6px;
 }
 
 .user-message {
     align-self: flex-end;
-    background-color: var(--user-msg-bg);
+    background: linear-gradient(90deg, var(--primary-color) 10%, var(--secondary-color) 100%);
     color: var(--user-msg-text);
-    border-bottom-right-radius: 4px;
+    border-bottom-right-radius: 6px;
+    border-top-right-radius: 6px;
 }
 
 .time {
     font-size: 11px;
-    margin-top: 5px;
+    margin-top: 6px;
     opacity: 0.7;
     text-align: right;
 }
@@ -130,9 +137,13 @@ body {
     display: none;
     align-self: flex-start;
     background-color: var(--bot-msg-bg);
-    padding: 12px 16px;
-    border-radius: 18px;
+    padding: 14px 18px;
+    border-radius: 20px;
     margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    max-width: 75%;
+    margin-top: auto; /* This pushes it to the bottom */
+    order: 9999; /* Ensure it's always at the end */
 }
 
 .typing-dots {
@@ -163,94 +174,102 @@ body {
 
 .input-container {
     display: flex;
-    padding: 15px;
+    padding: 18px 24px;
     background-color: white;
-    border-top: 1px solid #e5e7eb;
-    gap: 10px;
+    border-top: 1px solid #e0e7ff;
+    gap: 12px;
 }
 
 .message-input {
     flex: 1;
-    padding: 12px 16px;
-    border: 1px solid #d1d5db;
-    border-radius: 24px;
+    padding: 14px 18px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 28px;
     outline: none;
-    font-size: 15px;
-    transition: border-color 0.3s;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.2s;
+    background-color: #f6f8fa;
 }
 
 .message-input:focus {
     border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px #2563eb33;
 }
 
 .send-button {
-    background-color: var(--primary-color);
+    background: linear-gradient(90deg, var(--primary-color) 80%, var(--secondary-color) 100%);
     color: white;
     border: none;
-    width: 45px;
-    height: 45px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background 0.3s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.08);
 }
 
 .send-button:hover {
-    background-color: var(--secondary-color);
+    background: linear-gradient(90deg, var(--secondary-color) 80%, var(--primary-color) 100%);
+    box-shadow: 0 4px 16px rgba(37,99,235,0.12);
 }
 
 .quick-replies {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
+    gap: 10px;
+    margin-top: 12px;
 }
 
 .quick-reply {
-    background-color: white;
-    border: 1px solid #d1d5db;
-    padding: 8px 16px;
-    border-radius: 16px;
-    font-size: 14px;
+    background-color: #fff;
+    border: 1.5px solid #d1d5db;
+    padding: 9px 18px;
+    border-radius: 18px;
+    font-size: 15px;
     cursor: pointer;
     transition: all 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
 
 .quick-reply:hover {
-    background-color: #f3f4f6;
-    border-color: #9ca3af;
+    background-color: #e0e7ff;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
 }
 
 .booking-options {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-top: 15px;
+    gap: 12px;
+    margin-top: 18px;
 }
 
 .option-card {
-    background-color: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 12px;
+    background-color: #fff;
+    border: 1.5px solid #e0e7eb;
+    border-radius: 10px;
+    padding: 14px;
     cursor: pointer;
     transition: all 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 }
 
 .option-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(37,99,235,0.08);
+    transform: translateY(-2px) scale(1.01);
+    border-color: var(--primary-color);
 }
 
 .option-title {
     font-weight: 600;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 
 .option-desc {
-    font-size: 13px;
+    font-size: 14px;
     color: #6b7280;
 }
 
@@ -258,12 +277,19 @@ body {
     .container {
         height: 100vh;
         border-radius: 0;
+        max-width: 100vw;
     }
-    
+    .header, .input-container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    .chat-container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
     .message {
-        max-width: 85%;
+        max-width: 90%;
     }
-    
     .booking-options {
         grid-template-columns: 1fr;
     }
@@ -286,13 +312,6 @@ body {
             <div class="message bot-message">
                 Hello! I'm HotelHive Bot, your personal hotel booking assistant. I can help you search for hotels, check availability, and answer any questions you might have!
                 <div class="time">Just now</div>
-                
-                <div class="quick-replies">
-                    <div class="quick-reply" onclick="sendQuickReply('Hi, I need help finding a hotel')">Find a hotel</div>
-                    <div class="quick-reply" onclick="sendQuickReply('Show me available hotels in New York')">Hotels in New York</div>
-                    <div class="quick-reply" onclick="sendQuickReply('What amenities do you offer?')">Amenities</div>
-                    <div class="quick-reply" onclick="sendQuickReply('Help with booking')">Booking help</div>
-                </div>
             </div>
             
             <div class="typing-indicator" id="typingIndicator">
@@ -301,6 +320,7 @@ body {
                     <div class="typing-dot"></div>
                     <div class="typing-dot"></div>
                 </div>
+                <span style="margin-left:8px;color:#6b7280;"></span>
             </div>
         </div>
         
@@ -378,7 +398,10 @@ body {
             if (message && websocket && websocket.readyState === WebSocket.OPEN) {
                 addUserMessage(message);
                 messageInput.value = '';
-                
+
+                // Show progress animation immediately after sending
+                showTypingIndicator();
+
                 websocket.send(JSON.stringify({
                     type: 'message',
                     content: message
@@ -406,14 +429,17 @@ body {
         }
         
         function addBotMessage(text, quickReplies = null) {
+            // Hide progress animation when bot responds
+            hideTypingIndicator();
+
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', 'bot-message');
             messageElement.innerHTML = text + `<div class="time">${getCurrentTime()}</div>`;
-            
+
             if (quickReplies) {
                 const quickRepliesContainer = document.createElement('div');
                 quickRepliesContainer.classList.add('quick-replies');
-                
+
                 quickReplies.forEach(reply => {
                     const quickReply = document.createElement('div');
                     quickReply.classList.add('quick-reply');
@@ -421,16 +447,16 @@ body {
                     quickReply.setAttribute('onclick', reply.onclick);
                     quickRepliesContainer.appendChild(quickReply);
                 });
-                
+
                 messageElement.appendChild(quickRepliesContainer);
             }
-            
+
             chatContainer.appendChild(messageElement);
             scrollToBottom();
         }
         
         function showTypingIndicator() {
-            typingIndicator.style.display = 'block';
+            typingIndicator.style.display = 'flex';
             scrollToBottom();
         }
         

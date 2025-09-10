@@ -1,5 +1,5 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
-from agent.prompts import build_search_hotels_prompt
+from agent.prompts import build_check_availability_prompt
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 from langchain.memory import ConversationBufferMemory
@@ -10,12 +10,11 @@ load_dotenv()
 
 models = os.getenv("MODEL")
 api_key = os.getenv("API_KEY")
-redis_url = os.getenv("REDIS_URL", "redis://localhost:6379/0")  
 
 llm = ChatGoogleGenerativeAI(model=models, google_api_key=api_key, temperature=0)
 
-def hotel_search_agent(user_id:str):
-    prompt_template = build_search_hotels_prompt()
+def check_hotel_availability_agent(user_id:str):
+    prompt_template = build_check_availability_prompt()
     memory = None
     try:
         session_id = user_id or "default-session"

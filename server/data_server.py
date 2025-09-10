@@ -5,14 +5,20 @@ from langchain.output_parsers import PydanticOutputParser
 from agent.prompts import build_common_context
 from config.logging import log_exception, setup_logger
 from agent.hotel_search_agent import hotel_search_agent
+from agent.check_hotel_availability_agent import check_hotel_availability_agent
 import json
 import asyncio
+import redis
+import os
 
 mcp = FastMCP("HotelList")
 logger = setup_logger("data-server")
 
 df = pd.read_excel("./data/hotels.xlsx")
 data = df.to_dict(orient="records")
+df1 = pd.read_excel("./data/empty_rooms_5000.xlsx")
+data1 = df1.to_dict(orient="records")
+
 
 @mcp.tool()
 async def conversation_assistant(user_message: str):
@@ -85,6 +91,30 @@ async def hotel_search(question: str) -> dict:
     except Exception as e:
         log_exception(logger, e, "Hotel search tool error")
         return {"error": str(e)}
+    
+
+@mcp.tool()
+async def hotel_availability(question:str, hotel_name: str) -> dict:
+    """Search hotels in the local Excel dataset by natural language."""
+    try:
+        chain, memory = check_hotel_availability_agent("ved")
+        history = memory.load_memory_variables({}).get('history', '') if memory else ""
+        logger.info("History: %s", history)
+        output = await chain.ainvoke({
+            "empty_rooms": data1,
+            "hotels": data,
+            "hotel_name": hotel_name,
+            "history": history
+        })
+        
+        if memory:
+            memory.save_context({"input": question}, {"output": output})
+        
+        return output
+    except Exception as e:
+        log_exception(logger, e, "Hotel search tool error")
+        return {"error": str(e)}
+
 
 if __name__ == "__main__":
     mcp.run(transport="stdio")

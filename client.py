@@ -1,4 +1,4 @@
-# client.py (updated for API integration)
+# client.py (updated for hotel_availability tool integration)
 import asyncio
 from mcp.client.stdio import stdio_client
 from mcp import ClientSession, StdioServerParameters
@@ -43,16 +43,25 @@ async def process_message(user_input: str) -> str:
 
                 system_prompt = SystemMessage(content="""
                 You have access to MCP tools exposed by the data server.
+                
                 Routing policy:
                 (A) If the user's message is a greeting/small talk (e.g., 'hi', 'hello', 'hey', 'thanks', 'how are you'),
                     call 'conversation_assistant' with {"user_message": <message>}.
-                (B) If the user's message does NOT include a location (city/state/county) OR explicit filters
-                    (price, room_type, amenities, dates), call 'conversation_assistant' with {"user_message": <message>}
-                    to ask concise clarifying questions (location, budget, dates, room_type, amenities).
-                (C) ONLY when the message includes at least ONE location OR at least ONE explicit filter,
+                
+                (B) If the user's message is about searching for hotels with specific criteria (location, price, room_type, amenities, dates),
                     call 'hotel_search' with {"question": <message>}.
+                
+                (C) If the user's message is specifically about checking availability for a particular hotel by name,
+                    or asks about room availability, vacancies, or booking status for a specific hotel,
+                    call 'hotel_availability' with {"question": <message>, "hotel_name": <extracted_hotel_name>}.
+                    Extract the hotel name from the user's message if explicitly mentioned.
+                
+                (D) If the user's message doesn't fit the above categories or needs clarification,
+                    call 'conversation_assistant' with {"user_message": <message>}
+                    to ask concise clarifying questions.
+                
                 Always use exactly one tool per turn and return its response.
-                When in doubt, choose conversation_assistant.
+                When in doubt about hotel availability queries, choose conversation_assistant to ask for the hotel name.
                 """)
 
                 agent = create_react_agent(model=google_llm, tools=tools)
@@ -68,11 +77,9 @@ async def process_message(user_input: str) -> str:
                         timeout=TURN_TIMEOUT_SEC,
                     )
 
-                    # Extract the response
                     messages = state.get("messages", [])
                     final_text = ""
                     
-                    # Find the last AI message
                     for msg in reversed(messages):
                         if hasattr(msg, 'type') and msg.type == 'ai':
                             final_text = msg.content
@@ -99,12 +106,10 @@ async def process_message(user_input: str) -> str:
 async def main():
     """Main function for standalone use"""
     if len(sys.argv) > 1:
-        # If arguments are provided, process as a single message
         user_input = " ".join(sys.argv[1:])
         response = await process_message(user_input)
         print(response)
     else:
-        # Interactive mode
         while True:
             try:
                 user_input = input("You: ").strip()

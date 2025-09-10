@@ -1,0 +1,92 @@
+# ---------------------------
+# Python & Virtual Env
+# ---------------------------
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+.eggs/
+.Python
+.venv/
+venv/
+ENV/
+env/
+*.pyo
+*.pyd
+
+# ---------------------------
+# IDE & Editor
+# ---------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+
+# ---------------------------
+# OS Generated
+# ---------------------------
+.DS_Store
+Thumbs.db
+
+# ---------------------------
+# Logs & Outputs
+# ---------------------------
+*.log
+logs/
+*.out
+*.err
+nohup.out
+
+# ---------------------------
+# Checkpoints / Models
+# ---------------------------
+*.pth
+*.pt
+*.h5
+*.ckpt
+checkpoints/
+models/
+runs/
+wandb/
+
+# ---------------------------
+# FastAI / ML Specific
+# ---------------------------
+fastai/data/*
+fastai/tmp/*
+fastai/old/*
+__old/*
+*.pkl
+*.npz
+*.npy
+*.csv
+*.tsv
+
+# ---------------------------
+# Jupyter
+# ---------------------------
+.ipynb_checkpoints
+*.nbconvert.ipynb
+*.ipynb_build/
+
+# ---------------------------
+# Experiments / Agents
+# ---------------------------
+outputs/
+experiments/
+agents/
+artifacts/
+.cache/
+*.jsonl
+
+# ---------------------------
+# Environment / Config
+# ---------------------------
+*.env
+.env.*
+*.yaml
+*.yml
+config.json
+secrets.json
