@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotelHive Bot - Hotel Booking Assistant</title>
+    <style>
+        :root {
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --light-color: #f3f4f6;
+    --dark-color: #1f2937;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --error-color: #ef4444;
+    --user-msg-bg: #2563eb;
+    --bot-msg-bg: #e5e7eb;
+    --user-msg-text: white;
+    --bot-msg-text: #1f2937;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f9fafb;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    height: 95vh;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    font-size: 24px;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--success-color);
+    border-radius: 50%;
+    transition: background-color 0.3s;
+}
+
+.chat-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #f9fafb;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message {
+    max-width: 75%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    line-height: 1.5;
+    position: relative;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.bot-message {
+    align-self: flex-start;
+    background-color: var(--bot-msg-bg);
+    color: var(--bot-msg-text);
+    border-bottom-left-radius: 4px;
+}
+
+.user-message {
+    align-self: flex-end;
+    background-color: var(--user-msg-bg);
+    color: var(--user-msg-text);
+    border-bottom-right-radius: 4px;
+}
+
+.time {
+    font-size: 11px;
+    margin-top: 5px;
+    opacity: 0.7;
+    text-align: right;
+}
+
+.typing-indicator {
+    display: none;
+    align-self: flex-start;
+    background-color: var(--bot-msg-bg);
+    padding: 12px 16px;
+    border-radius: 18px;
+    margin-bottom: 10px;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #9ca3af;
+    border-radius: 50%;
+    animation: typingAnimation 1.5s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typingAnimation {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.input-container {
+    display: flex;
+    padding: 15px;
+    background-color: white;
+    border-top: 1px solid #e5e7eb;
+    gap: 10px;
+}
+
+.message-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 24px;
+    outline: none;
+    font-size: 15px;
+    transition: border-color 0.3s;
+}
+
+.message-input:focus {
+    border-color: var(--primary-color);
+}
+
+.send-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.send-button:hover {
+    background-color: var(--secondary-color);
+}
+
+.quick-replies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.quick-reply {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    padding: 8px 16px;
+    border-radius: 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quick-reply:hover {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+.booking-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.option-card {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.option-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.option-title {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.option-desc {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+@media (max-width: 768px) {
+    .container {
+        height: 100vh;
+        border-radius: 0;
+    }
+    
+    .message {
+        max-width: 85%;
+    }
+    
+    .booking-options {
+        grid-template-columns: 1fr;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <h2>HotelHive Bot</h2>
+            </div>
+            <div class="status">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="statusText">Connecting...</span>
+            </div>
+        </div>
+        
+        <div class="chat-container" id="chatContainer">
+            <div class="message bot-message">
+                Hello! I'm HotelHive Bot, your personal hotel booking assistant. I can help you search for hotels, check availability, and answer any questions you might have!
+                <div class="time">Just now</div>
+                
+                <div class="quick-replies">
+                    <div class="quick-reply" onclick="sendQuickReply('Hi, I need help finding a hotel')">Find a hotel</div>
+                    <div class="quick-reply" onclick="sendQuickReply('Show me available hotels in New York')">Hotels in New York</div>
+                    <div class="quick-reply" onclick="sendQuickReply('What amenities do you offer?')">Amenities</div>
+                    <div class="quick-reply" onclick="sendQuickReply('Help with booking')">Booking help</div>
+                </div>
+            </div>
+            
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="input-container">
+            <input type="text" class="message-input" id="messageInput" placeholder="Type your message here..." onkeypress="handleKeyPress(event)">
+            <button class="send-button" onclick="sendMessage()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chatContainer');
+        const messageInput = document.getElementById('messageInput');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        
+        let websocket = null;
+        
+        // Initialize WebSocket connection
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/ws`;
+            
+            websocket = new WebSocket(wsUrl);
+            
+            websocket.onopen = function() {
+                updateStatus('online', 'Online');
+                addBotMessage("Connected to HotelHive Bot! How can I help you today?");
+            };
+            
+            websocket.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                
+                if (data.type === 'message') {
+                    addBotMessage(data.content);
+                } else if (data.type === 'typing') {
+                    if (data.isTyping) {
+                        showTypingIndicator();
+                    } else {
+                        hideTypingIndicator();
+                    }
+                }
+            };
+            
+            websocket.onclose = function() {
+                updateStatus('offline', 'Offline');
+                setTimeout(connectWebSocket, 3000); // Reconnect after 3 seconds
+            };
+            
+            websocket.onerror = function() {
+                updateStatus('error', 'Connection Error');
+            };
+        }
+        
+        function updateStatus(status, text) {
+            statusDot.style.backgroundColor = 
+                status === 'online' ? '#10b981' : 
+                status === 'offline' ? '#6b7280' : '#ef4444';
+            statusText.textContent = text;
+        }
+        
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message && websocket && websocket.readyState === WebSocket.OPEN) {
+                addUserMessage(message);
+                messageInput.value = '';
+                
+                websocket.send(JSON.stringify({
+                    type: 'message',
+                    content: message
+                }));
+            }
+        }
+        
+        function sendQuickReply(message) {
+            if (websocket && websocket.readyState === WebSocket.OPEN) {
+                addUserMessage(message);
+                
+                websocket.send(JSON.stringify({
+                    type: 'message',
+                    content: message
+                }));
+            }
+        }
+        
+        function addUserMessage(text) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'user-message');
+            messageElement.innerHTML = text + `<div class="time">${getCurrentTime()}</div>`;
+            chatContainer.appendChild(messageElement);
+            scrollToBottom();
+        }
+        
+        function addBotMessage(text, quickReplies = null) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'bot-message');
+            messageElement.innerHTML = text + `<div class="time">${getCurrentTime()}</div>`;
+            
+            if (quickReplies) {
+                const quickRepliesContainer = document.createElement('div');
+                quickRepliesContainer.classList.add('quick-replies');
+                
+                quickReplies.forEach(reply => {
+                    const quickReply = document.createElement('div');
+                    quickReply.classList.add('quick-reply');
+                    quickReply.textContent = reply.text;
+                    quickReply.setAttribute('onclick', reply.onclick);
+                    quickRepliesContainer.appendChild(quickReply);
+                });
+                
+                messageElement.appendChild(quickRepliesContainer);
+            }
+            
+            chatContainer.appendChild(messageElement);
+            scrollToBottom();
+        }
+        
+        function showTypingIndicator() {
+            typingIndicator.style.display = 'block';
+            scrollToBottom();
+        }
+        
+        function hideTypingIndicator() {
+            typingIndicator.style.display = 'none';
+        }
+        
+        function getCurrentTime() {
+            const now = new Date();
+            return now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+        
+        function scrollToBottom() {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        connectWebSocket();
+       
+        setTimeout(() => {
+            messageInput.focus();
+        }, 100);
+    </script>
+</body>
+</html>
