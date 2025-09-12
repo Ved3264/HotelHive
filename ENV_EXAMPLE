@@ -1,7 +1,5 @@
 # Copy this file to .env and fill in your values
-
 # Google Generative AI API key
 API_KEY=YOUR_GOOGLE_GENAI_API_KEY
-
-# Model name, e.g., gemini-2.0-flash or gemini-1.5-flash
 MODEL=gemini-2.0-flash
+REDIS_URL=redis://127.0.0.1:6379/0

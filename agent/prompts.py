@@ -327,7 +327,7 @@ def build_common_context(
     capabilities: list[str] | None = None,
     policies: Dict[str, str] | None = None,
 ) -> str:
-    context = "Our conversation history:\n{history}\n\n"
+    context = "Our conversation history:\n{history}\n\n"  # Ensure history placeholder is here
     if schema_hotels:
         context += f"Hotel data structure: {schema_hotels}\n"
     if schema_empty_rooms:

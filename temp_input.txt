@@ -1,2 +1,2 @@
-i am looking for room book
+I want to book a King room at Hotel_84 from February 22 to February 28 for John Doe.
 exit

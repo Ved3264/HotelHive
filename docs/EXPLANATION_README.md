@@ -1,4 +1,4 @@
-# 🏨 MCP-Langchin: AI-Powered Hotel Management System
+# 🏨 HotelHive-MCP-Langchin: AI-Powered Hotel Management System
 
 ## What Is This System?
 
